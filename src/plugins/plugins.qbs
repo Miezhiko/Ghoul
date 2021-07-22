@@ -65,6 +65,7 @@ Project {
         "mcusupport/mcusupport.qbs",
         "mercurial/mercurial.qbs",
         "modeleditor/modeleditor.qbs",
+        "minimap/minimap.qbs",
         "nim/nim.qbs",
         "perforce/perforce.qbs",
         "perfprofiler/perfprofiler.qbs",
