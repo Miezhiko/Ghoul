@@ -76,6 +76,7 @@ Project {
         "qbsprojectmanager/qbsprojectmanager.qbs",
         "python/python.qbs",
         "qdoc/qdoc.qbs",
+        "drp/drp.qbs",
         "qmldesigner/qmldesigner.qbs",
         "qmljseditor/qmljseditor.qbs",
         "qmljstools/qmljstools.qbs",
