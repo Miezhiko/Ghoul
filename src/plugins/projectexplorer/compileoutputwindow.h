@@ -8,6 +8,7 @@
 #include "appoutputpane.h"
 
 #include <coreplugin/ioutputpane.h>
+#include <utils/outputformat.h>
 
 #include <QCoreApplication>
 
@@ -80,6 +81,7 @@ private:
     Core::OutputWindow *m_outputWindow;
     ShowOutputTaskHandler *m_handler;
     QToolButton *m_cancelBuildButton;
+    Utils::OutputFormat m_stdErrContext;
     QToolButton * const m_settingsButton;
 };
 
