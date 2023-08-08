@@ -56,10 +56,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
-if (WITH_TESTS)
-  set(QT_TEST_COMPONENT Test)
-  set(IMPLICIT_DEPENDS Qt::Test)
-endif()
+set(IMPLICIT_DEPENDS Qt::Test)
 
 # suppress bogus warning
 # warning C4573 requires the compiler to capture 'this' but the current default capture mode does not allow it
@@ -77,7 +74,7 @@ endif()
 
 find_package(Qt6
   ${IDE_QT_VERSION_MIN}
-  COMPONENTS Concurrent Core Gui Network PrintSupport Qml Sql Widgets Xml ${QT_TEST_COMPONENT}
+  COMPONENTS Concurrent Core Gui Network PrintSupport Qml Sql Widgets Xml Core5Compat Test
   REQUIRED
 )
 
@@ -193,10 +190,6 @@ if (APPLE)
   find_library(FWWebKit WebKit)
 endif()
 
-if (WITH_TESTS)
-  enable_testing()
-endif()
-
 if (UNIX)
   add_subdirectory(bin)
 endif()
@@ -205,10 +198,6 @@ add_subdirectory(src)
 add_subdirectory(share)
 if (NOT BUILD_DESIGNSTUDIO)
     add_subdirectory(dist)
-endif()
-
-if (WITH_TESTS)
-  add_subdirectory(tests)
 endif()
 
 add_subdirectory(doc)
