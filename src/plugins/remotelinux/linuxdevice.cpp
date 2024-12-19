@@ -16,9 +16,6 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/messagemanager.h>
 
-#include <gocmdbridge/client/bridgedfileaccess.h>
-#include <gocmdbridge/client/cmdbridgeclient.h>
-
 #include <projectexplorer/devicesupport/devicemanager.h>
 #include <projectexplorer/devicesupport/processlist.h>
 #include <projectexplorer/devicesupport/sshparameters.h>
@@ -348,11 +345,10 @@ public:
     }
 
     LinuxDevice *q = nullptr;
-
-    BoolAspect m_disconnected;
-    UnavailableDeviceFileAccess m_disconnectedAccess;
     LinuxDeviceAccess m_scriptAccess;
-    std::unique_ptr<CmdBridge::FileAccess> m_cmdBridgeAccess;
+
+    UnavailableDeviceFileAccess m_disconnectedAccess;
+    BoolAspect m_disconnected;
 
     QReadWriteLock m_environmentCacheLock;
     std::optional<Environment> m_environmentCache;
@@ -1189,28 +1185,14 @@ Result<> LinuxDevicePrivate::setupShell(const SshParameters &sshParameters, bool
     if (announce)
         unannounceConnectionAttempt();
 
-    if (!result) {
-        setupDisconnectedAccess();
-        return result;
-    }
-
-    setupConnectedAccess();
-    setOsTypeFromUnameResult(m_scriptAccess.m_handler->runInShell(unameCommand()));
-
-    m_cmdBridgeAccess = std::make_unique<CmdBridge::FileAccess>();
-    // We have good shell access now, try to get bridge access, too:
-    Result<> initResult
-        = m_cmdBridgeAccess
-              ->deployAndInit(Core::ICore::libexecPath(), q->rootPath(), getEnvironment());
-    if (initResult) {
-        qCDebug(linuxDeviceLog) << "Bridge ok to use";
-        q->setFileAccess(m_cmdBridgeAccess.get());
+    if (result) {
+        setupConnectedAccess();
+        setOsTypeFromUnameResult(m_scriptAccess.m_handler->runInShell(unameCommand()));
     } else {
-        qCDebug(linuxDeviceLog) << "Failed to start CmdBridge:" << initResult.error()
-                                  << ", falling back to slow shell access";
+        setupDisconnectedAccess();
     }
 
-    return ResultOk; // Both are fine.
+    return result;
 }
 
 RunResult LinuxDevicePrivate::runInShell(const CommandLine &cmd, const QByteArray &data)
