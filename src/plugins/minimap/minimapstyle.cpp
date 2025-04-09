@@ -518,7 +518,7 @@ bool MinimapStyle::drawMinimap(const QStyleOptionComplex* option,
       }
       if (codeFoldingVisible && !folded)
       {
-         folded = TextBlockUserData::isFolded(b);
+         folded = TextEditor::TextBlockUserData::isFolded(b);
       }
       if (revisionsVisible)
       {
