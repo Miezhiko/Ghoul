@@ -430,7 +430,6 @@ public:
     void shutdown()
     {
         q->setFileAccess(&m_disconnectedAccess);
-        m_cmdBridgeAccess.reset();
     }
 
     LinuxDevice *q = nullptr;
