@@ -3,6 +3,7 @@
     "Name" : "Minimap",
     "Version" : "${IDE_VERSION}",
     "CompatVersion" : "${IDE_VERSION_COMPAT}",
+    "DisabledByDefault" : false,
     "VendorId" : "miezhinko",
     "Vendor" : "Miezhinko (based on emJay)",
     "Copyright" : "(C) ${IDE_COPYRIGHT_YEAR} Miezhinko",
