@@ -37,11 +37,8 @@ namespace Internal
 
   MinimapPlugin::~MinimapPlugin() {}
 
-  bool MinimapPlugin::initialize(const QStringList& arguments, QString* errorMessage)
+  void MinimapPlugin::initialize()
   {
-     Q_UNUSED(arguments)
-     Q_UNUSED(errorMessage)
-
      new MinimapSettings(this);
 
      qApp->setStyle(new MinimapStyle(qApp->style()));
@@ -49,8 +46,6 @@ namespace Internal
      Core::EditorManager* em = Core::EditorManager::instance();
      connect(em, &Core::EditorManager::editorCreated, this,
              &MinimapPlugin::onEditorCreated);
-
-     return true;
   }
 
   void MinimapPlugin::extensionsInitialized()

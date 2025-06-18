@@ -51,7 +51,7 @@ namespace Minimap
 
       ~MinimapPlugin();
 
-      bool initialize(const QStringList& arguments, QString* errorString);
+      virtual void initialize();
       void extensionsInitialized();
       ShutdownFlag aboutToShutdown();
 
