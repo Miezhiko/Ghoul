@@ -20,59 +20,58 @@
 
 #pragma once
 
-#include "minimapstyle.h"
+#include <QObject>
 
 #include <utils/store.h>
 
-#include <QObject>
-
-namespace Minimap
-{
-namespace Internal
-{
+namespace Minimap {
+namespace Internal {
 class MinimapSettingsPage;
 
 class MinimapSettings : public QObject
 {
-   Q_OBJECT
-
+    Q_OBJECT
 public:
-   explicit MinimapSettings(QObject* parent);
-   ~MinimapSettings();
+    explicit MinimapSettings(QObject *parent);
+    ~MinimapSettings();
 
-   Utils::Store toMap() const;
-   void fromMap(const Utils::Store &map);
+    Utils::Store toMap() const;
+    void fromMap(const Utils::Store &map);
 
-private:
-   static MinimapSettings* instance();
+    static MinimapSettings *instance();
 
-   static bool enabled();
-   static int width();
-   static int lineCountThreshold();
-   static int alpha();
+    static bool enabled();
+    static int width();
+    static int lineCountThreshold();
+    static int alpha();
+    static bool centerOnClick();
+    static bool showLineTooltip();
 
 signals:
-   void enabledChanged(bool);
-   void widthChanged(int);
-   void lineCountThresholdChanged(int);
-   void alphaChanged(int);
+    void enabledChanged(bool);
+    void widthChanged(int);
+    void lineCountThresholdChanged(int);
+    void alphaChanged(int);
+    void centerOnClickChanged(bool);
+    void showLineTooltipChanged(bool);
 
 private:
-   friend class MinimapSettingsPage;
+    friend class MinimapSettingsPageWidget;
 
-   void setEnabled(bool enabled);
-   void setWidth(int width);
-   void setLineCountThreshold(int lineCountThreshold);
-   void setAlpha(int alpha);
+    void setEnabled(bool enabled);
+    void setWidth(int width);
+    void setLineCountThreshold(int lineCountThreshold);
+    void setAlpha(int alpha);
+    void setCenterOnClick(bool centerOnClick);
+    void setShowLineTooltip(bool showLineTooltip);
 
-   bool m_enabled;
-   int m_width;
-   int m_lineCountThreshold;
-   int m_alpha;
-   MinimapSettingsPage* m_settingsPage;
-
-   friend MinimapStyleObject;
-   friend MinimapStyle;
+    bool m_enabled;
+    int m_width;
+    int m_lineCountThreshold;
+    int m_alpha;
+    bool m_centerOnClick;
+    bool m_showLineTooltip;
+    MinimapSettingsPage *m_settingsPage;
 };
-}
-}
+} // namespace Internal
+} // namespace Minimap
