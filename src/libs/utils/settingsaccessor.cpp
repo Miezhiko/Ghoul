@@ -309,11 +309,14 @@ int VersionedBackUpStrategy::compare(const SettingsAccessor::RestoreData &data1,
                                      const SettingsAccessor::RestoreData &data2) const
 {
     const int origVersion = versionFromMap(data1.data);
-    const int newVersion = versionFromMap(data2.data);
+    const bool origValid = m_accessor->isValidVersionAndId(origVersion, settingsIdFromMap(data1.data));
 
-    if (origVersion == newVersion)
+    const int newVersion = versionFromMap(data2.data);
+    const bool newValid = m_accessor->isValidVersionAndId(newVersion, settingsIdFromMap(data2.data));
+
+    if ((!origValid && !newValid) || (origValid && newValid && origVersion == newVersion))
         return 0;
-    if (origVersion < newVersion)
+    if ((!origValid &&  newValid) || (origValid && newValid && origVersion < newVersion))
         return 1;
     return -1;
 }
@@ -510,6 +513,25 @@ UpgradingSettingsAccessor::validateVersionRange(const RestoreData &data) const
                        "the newer version.</p>")
                 .arg(result.path.toUserOutput(), m_applicationDisplayName), Issue::Type::WARNING);
         i.buttons.insert(QMessageBox::Ok, Continue);
+        result.issue = i;
+        return result;
+    }
+
+    const QByteArray readId = settingsIdFromMap(result.data);
+    if (!settingsId().isEmpty() && !readId.isEmpty() && readId != settingsId()) {
+        Issue i(Tr::tr("Settings File for \"%1\" from a Different Environment?")
+                .arg(m_applicationDisplayName),
+                Tr::tr("<p>No settings file created by this instance "
+                       "of %1 was found.</p>"
+                       "<p>Did you work with this project on another machine or "
+                       "using a different settings path before?</p>"
+                       "<p>Do you still want to load the settings file \"%2\"?</p>")
+                .arg(m_applicationDisplayName, result.path.toUserOutput()), Issue::Type::WARNING);
+        i.defaultButton = QMessageBox::No;
+        i.escapeButton = QMessageBox::No;
+        i.buttons.clear();
+        i.buttons.insert(QMessageBox::Yes, Continue);
+        i.buttons.insert(QMessageBox::No, DiscardAndContinue);
         result.issue = i;
         return result;
     }

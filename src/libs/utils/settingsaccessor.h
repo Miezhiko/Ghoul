@@ -225,6 +225,7 @@ public:
 
     QByteArray settingsId() const { return m_id; }
 
+    bool isValidVersionAndId(const int version, const QByteArray &id) const;
     VersionUpgrader *upgrader(const int version) const;
 
     RestoreData readData(const FilePath &path) const override;
